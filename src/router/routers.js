@@ -23,6 +23,11 @@ export default [
         path: "brokers",
         name: "Brokers",
         component: () => import("@/pages/brokers/index.vue"),
+      },
+      {
+        path: "strategies",
+        name: "Strategies",
+        component: () => import("@/pages/strategies/index.vue"),
       }
     ],
   },
