@@ -18,7 +18,7 @@ import { createApp } from 'vue'
 import 'unfonts.css'
 
 const axios_instance = axios.create({
-	baseURL: "https://d5nw9mgh-8585.euw.devtunnels.ms/",
+	baseURL: "https://w2llv2cm-8585.inc1.devtunnels.ms/",
 	timeout: 50000,
 });
 const app = createApp(App)
@@ -33,7 +33,7 @@ app.config.globalProperties.$api = {
   //   };
 
     const headers = {
-      // token: sessionStorage.getItem("token")
+      Authorization: sessionStorage.getItem("token")
     };
 
     axios_instance
@@ -57,7 +57,7 @@ app.config.globalProperties.$api = {
   },
   request_POST: (url, data = {}, onSuccess = null, onError = null) => {
     const headers = {
-      token: sessionStorage.getItem("token")
+      Authorization: sessionStorage.getItem("token")
     };
 
     axios_instance
@@ -73,6 +73,54 @@ app.config.globalProperties.$api = {
       })
       .catch((error) => {
         console.error("POST request failed:", error);
+        
+        if (onError) {
+          onError(error);
+        }
+      });
+  },
+  request_DELETE: (url, look_up_key, onSuccess = null, onError = null) => {
+    const headers = {
+      Authorization: sessionStorage.getItem("token")
+    };
+
+    axios_instance
+      .delete(url + look_up_key, { headers })
+      .then((response) => {
+        if (response.data.success === false) {
+          console.error("Error:", response.data.message);
+        }
+        
+        if (onSuccess) {
+          onSuccess(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("DELETE request failed:", error);
+        
+        if (onError) {
+          onError(error);
+        }
+      });
+  },
+  request_PUT: (url, look_up_key, data = {}, onSuccess = null, onError = null) => {
+    const headers = {
+      Authorization: sessionStorage.getItem("token")
+    };
+
+    axios_instance
+      .put(url + look_up_key, data, headers ? { headers } : {})
+      .then((response) => {
+        if (response.data.success === false) {
+          console.error("Error:", response.data.message);
+        }
+        
+        if (onSuccess) {
+          onSuccess(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("PUT request failed:", error);
         
         if (onError) {
           onError(error);
