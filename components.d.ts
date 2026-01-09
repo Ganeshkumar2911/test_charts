@@ -11,8 +11,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./src/components/AppFooter.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    AddBrokerDialog: typeof import('./src/components/brokers/addBrokerDialog.vue')['default']
+    AddstrategieDialog: typeof import('./src/components/strategies/addstrategieDialog.vue')['default']
+    ConfigureStrategie: typeof import('./src/components/strategies/configureStrategie.vue')['default']
+    ConformationDialog: typeof import('./src/components/strategies/conformationDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

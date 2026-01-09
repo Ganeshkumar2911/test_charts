@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     '/brokers/': RouteRecordInfo<'/brokers/', '/brokers', Record<never, never>, Record<never, never>>,
     '/chat': RouteRecordInfo<'/chat', '/chat', Record<never, never>, Record<never, never>>,
     '/dashboard/': RouteRecordInfo<'/dashboard/', '/dashboard', Record<never, never>, Record<never, never>>,
+    '/strategies/': RouteRecordInfo<'/strategies/', '/strategies', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -54,6 +55,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/dashboard/index.vue': {
       routes: '/dashboard/'
+      views: never
+    }
+    'src/pages/strategies/index.vue': {
+      routes: '/strategies/'
       views: never
     }
   }
