@@ -85,7 +85,7 @@ const login = () => {
     }
     const successHandler = (response) => {
         disable.value = false;
-        sessionStorage.setItem("token", response.access_token);
+        sessionStorage.setItem("token", `Bearer ${response.access_token}`);
         proxy.$router.push("/dashboard");
     }
     const failureHandler = (error) => {

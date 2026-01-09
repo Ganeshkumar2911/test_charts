@@ -12,13 +12,13 @@
         <div class="drawerContent">
           <v-list>
             <v-list-item
-            v-for="crypto in CRYPTO_LIST"
-            :key="crypto.symbol"
+            v-for="item in NAV_LIST"
+            :key="item.symbol"
             class="mx-2 rounded"
-            :to="crypto.symbol"
+            :to="item.symbol"
             active-class="color"
             >
-                <v-list-item-title>{{ crypto.name }}</v-list-item-title>
+                <v-list-item-title>{{ item.name }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </div>
@@ -50,8 +50,10 @@ import { useRoute } from 'vue-router';
     //     { symbol: 'DOTUSDT', name: 'Polkadot' },
     //     { symbol: 'MATICUSDT', name: 'Polygon' }
     // ];
-    const CRYPTO_LIST = [
-        { symbol: 'Dashboard', name: 'Dashboard' },
+    const NAV_LIST = [
+      { symbol: 'dashboard', name: 'Dashboard' },
+      { symbol: 'brokers', name: 'Brokers' },
+      { symbol: 'strategies', name: 'Strategies' },
 
     ];
   </script>
