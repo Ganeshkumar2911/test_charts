@@ -173,7 +173,7 @@ watch(
         
         document.getElementById('chart').style.backgroundColor = backgroundColor;
     },
-    { immediate: true } // ← ADD THIS
+    { immediate: true }
 );
 
 const createChart = async () => {
