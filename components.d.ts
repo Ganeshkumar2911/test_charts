@@ -13,9 +13,13 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddBrokerDialog: typeof import('./src/components/brokers/addBrokerDialog.vue')['default']
     AddstrategieDialog: typeof import('./src/components/strategies/addstrategieDialog.vue')['default']
+    ChartTypeSelector: typeof import('./src/components/chatView/ChartTypeSelector.vue')['default']
     ConfigureStrategie: typeof import('./src/components/strategies/configureStrategie.vue')['default']
     ConformationDialog: typeof import('./src/components/strategies/conformationDialog.vue')['default']
+    IndicatorSelector: typeof import('./src/components/chatView/IndicatorSelector.vue')['default']
+    IntervalSelector: typeof import('./src/components/chatView/IntervalSelector.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SymbolSearchDialog: typeof import('./src/components/chatView/SymbolSearchDialog.vue')['default']
   }
 }

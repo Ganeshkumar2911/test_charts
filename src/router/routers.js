@@ -7,7 +7,7 @@ export default [
     path: "",
     name: "Default",
     component: Default,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: false },
     children: [
       // {
       //   path: "chart/:id",
@@ -28,6 +28,11 @@ export default [
         path: "strategies",
         name: "Strategies",
         component: () => import("@/pages/strategies/index.vue"),
+      },
+      {
+        path: "kline-chat",
+        name: "KLineChart",
+        component: () => import("@/pages/klineChart/index.vue"),
       }
     ],
   },
@@ -42,5 +47,10 @@ export default [
         component: () => import("@/pages/auth/login.vue"),
       },
     ],
+  },
+  {
+    path: "/chat",
+    name: "Chat",
+    component: () => import("@/pages/chartView/index.vue"),
   }
 ];

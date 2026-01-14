@@ -54,7 +54,7 @@ import { useRoute } from 'vue-router';
       { symbol: 'dashboard', name: 'Dashboard' },
       { symbol: 'brokers', name: 'Brokers' },
       { symbol: 'strategies', name: 'Strategies' },
-
+       { symbol: 'kline-chat', name: 'K Line Chat' },
     ];
   </script>
   

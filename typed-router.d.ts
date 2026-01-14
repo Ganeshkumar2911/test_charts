@@ -21,8 +21,11 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/auth/login': RouteRecordInfo<'/auth/login', '/auth/login', Record<never, never>, Record<never, never>>,
     '/brokers/': RouteRecordInfo<'/brokers/', '/brokers', Record<never, never>, Record<never, never>>,
+    '/chartView/': RouteRecordInfo<'/chartView/', '/chartView', Record<never, never>, Record<never, never>>,
+    '/chartView/chat': RouteRecordInfo<'/chartView/chat', '/chartView/chat', Record<never, never>, Record<never, never>>,
     '/chat': RouteRecordInfo<'/chat', '/chat', Record<never, never>, Record<never, never>>,
     '/dashboard/': RouteRecordInfo<'/dashboard/', '/dashboard', Record<never, never>, Record<never, never>>,
+    '/klineChart/': RouteRecordInfo<'/klineChart/', '/klineChart', Record<never, never>, Record<never, never>>,
     '/strategies/': RouteRecordInfo<'/strategies/', '/strategies', Record<never, never>, Record<never, never>>,
   }
 
@@ -49,12 +52,24 @@ declare module 'vue-router/auto-routes' {
       routes: '/brokers/'
       views: never
     }
+    'src/pages/chartView/index.vue': {
+      routes: '/chartView/'
+      views: never
+    }
+    'src/pages/chartView/chat.vue': {
+      routes: '/chartView/chat'
+      views: never
+    }
     'src/pages/chat.vue': {
       routes: '/chat'
       views: never
     }
     'src/pages/dashboard/index.vue': {
       routes: '/dashboard/'
+      views: never
+    }
+    'src/pages/klineChart/index.vue': {
+      routes: '/klineChart/'
       views: never
     }
     'src/pages/strategies/index.vue': {
