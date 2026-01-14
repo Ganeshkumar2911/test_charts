@@ -75,8 +75,10 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useDarkMode } from '@/constants/useDarkMode';
-const { isDarkMode } = useDarkMode();
+import { useThemeStore } from '@/store/theme';
+import { storeToRefs } from 'pinia';
+
+const { isDarkMode } = storeToRefs(useThemeStore());
 
 const props = defineProps({
     selectedIndicators: {

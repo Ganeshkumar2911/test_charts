@@ -94,9 +94,10 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import { useDarkMode } from '@/constants/useDarkMode';
+import { useThemeStore } from '@/store/theme';
+import { storeToRefs } from 'pinia';
 
-const { isDarkMode } = useDarkMode();
+const { isDarkMode } = storeToRefs(useThemeStore());
 
 const props = defineProps({
     dialog: {

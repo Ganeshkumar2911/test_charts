@@ -22,7 +22,6 @@
       <v-divider vertical class="my-2"></v-divider>
     </div>
 
-    <!-- Takes remaining space -->
     <div class="d-flex flex-grow-1" :class="isDarkMode ? 'bg-grey-darken-3' : 'bg-grey-lighten-3'">
       <!-- Drawing Tools Sidebar -->
       <div class="d-flex flex-column fill-height overflow-hidden" :class="isDarkMode ? 'bg-grey-darken-4' : 'bg-white'">
@@ -35,7 +34,7 @@
               variant="text"
               size="small"
               class="mb-2"
-              @click="toggleDarkMode"
+              @click="toggleTheme()"
             ></v-btn>
           </template>
           <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
@@ -90,7 +89,7 @@
           v-model:chartType="selectedChartType.value"
           v-model:indicators="selectedIndicators"
           v-model:selectedTool="selectedTool"
-          v-model:isDarkMode="isDarkMode"
+          
           @tool-used="onToolUsed"
         />
       </div>
@@ -105,12 +104,18 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import { useThemeStore } from '@/store/theme.js'
+import { storeToRefs } from 'pinia';
 import IntervalSelector from '@/components/chatView/IntervalSelector.vue';
 import ChartTypeSelector from '@/components/chatView/ChartTypeSelector.vue';
 import IndicatorSelector from '@/components/chatView/IndicatorSelector.vue';
 import SymbolSearchDialog from '@/components/chatView/SymbolSearchDialog.vue';
 import Chart from './chat.vue';
+
+const themeStore = useThemeStore()
+const { isDarkMode } = storeToRefs(themeStore)
+const { toggleTheme } = themeStore
 
 const searchDialog = ref(false);
 const selectedInterval = ref({ label: '1 Minute', value: '1m' });
@@ -124,7 +129,6 @@ const selectedSymbol = ref({
 });
 
 const selectedTool = ref(null);
-const isDarkMode = ref(localStorage.getItem('isDarkMode') === 'true');
 
 const drawingTools = [
   { label: 'Cursor', value: null, icon: 'mdi-cursor-default' },
@@ -148,11 +152,5 @@ const onToolUsed = () => {
 
 const clearAllDrawings = () => {
   selectedTool.value = 'clearAll';
-};
-watch(isDarkMode, (newValue) => {
-  localStorage.setItem('isDarkMode', newValue.toString());
-});
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value;
 };
 </script>

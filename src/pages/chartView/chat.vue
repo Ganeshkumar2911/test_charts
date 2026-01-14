@@ -6,6 +6,11 @@
 import { defineProps, watch, onMounted, onBeforeUnmount } from 'vue'; 
 import { init, dispose } from 'klinecharts';
 import { defineEmits } from 'vue';
+import { useThemeStore } from '@/store/theme';
+import { storeToRefs } from 'pinia';
+
+const { isDarkMode } = storeToRefs(useThemeStore());
+
 const emit = defineEmits(['tool-used']); 
 
 let chart = null
@@ -34,10 +39,6 @@ const props = defineProps({
         type: String,
         default: null
     },
-    isDarkMode: { 
-        type: Boolean,
-        default: false
-    }
 });
 onMounted(() => {
     createChart();
@@ -138,8 +139,7 @@ watch(() => props.selectedTool,
     }
 );
 
-watch(
-    () => props.isDarkMode,
+watch(isDarkMode,
     (isDark) => {
         if (!chart) return;
         
@@ -180,9 +180,9 @@ const createChart = async () => {
     chart = init('chart')
     
     // Apply dark mode on chart creation
-    const backgroundColor = props.isDarkMode ? '#1e1e1e' : '#ffffff';
-    const textColor = props.isDarkMode ? '#d9d9d9' : '#333333';
-    const gridColor = props.isDarkMode ? '#404040' : '#e0e0e0';
+    const backgroundColor = isDarkMode ? '#1e1e1e' : '#ffffff';
+    const textColor = isDarkMode ? '#d9d9d9' : '#333333';
+    const gridColor = isDarkMode ? '#404040' : '#e0e0e0';
     
     chart.setStyles({
         candle: props.chartType === 'line' 
