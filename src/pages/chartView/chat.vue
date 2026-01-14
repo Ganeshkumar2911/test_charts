@@ -180,9 +180,9 @@ const createChart = async () => {
     chart = init('chart')
     
     // Apply dark mode on chart creation
-    const backgroundColor = isDarkMode ? '#1e1e1e' : '#ffffff';
-    const textColor = isDarkMode ? '#d9d9d9' : '#333333';
-    const gridColor = isDarkMode ? '#404040' : '#e0e0e0';
+    const backgroundColor = isDarkMode.value ? '#1e1e1e' : '#ffffff';
+    const textColor = isDarkMode.value ? '#d9d9d9' : '#333333';
+    const gridColor = isDarkMode.value ? '#404040' : '#e0e0e0';
     
     chart.setStyles({
         candle: props.chartType === 'line' 
