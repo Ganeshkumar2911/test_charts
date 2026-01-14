@@ -6,7 +6,7 @@
                 v-bind="props"
                 :class="themeStore.isDarkMode ? 'bg-grey-darken-4 text-white' : 'bg-white'"
             >
-                <v-icon :icon="selectedChartTypeModel.icon" size="small" class="mr-2"></v-icon>
+                <span class="material-symbols-outlined">{{ selectedChartTypeModel.icon }}</span>
             </v-btn>
         </template>
 
@@ -38,7 +38,7 @@
                     :class="themeStore.isDarkMode ? 'text-white' : ''"
                 >
                     <template v-slot:prepend>
-                        <v-icon :icon="chartType.icon" size="small"></v-icon>
+                        <span class="material-symbols-outlined mr-3">{{ chartType.icon }}</span>
                     </template>
                     <v-list-item-title>{{ chartType.label }}</v-list-item-title>
                 </v-list-item>
@@ -70,13 +70,13 @@ const selectedChartTypeModel = computed({
 });
 
 const chartTypes = [
-    { label: 'Candlestick', value: 'candle_solid', icon: 'mdi-chart-box-outline' },
-    { label: 'Line', value: 'line', icon: 'mdi-chart-line-variant' },
-    { label: 'Hollow Candlestick', value: 'candle_stroke', icon: 'mdi-chart-box' },
-    { label: 'Up Stroke Candle', value: 'candle_up_stroke', icon: 'mdi-chart-box-plus-outline' },
-    { label: 'Down Stroke Candle', value: 'candle_down_stroke', icon: 'mdi-chart-line' },
-    { label: 'Area', value: 'area', icon: 'mdi-chart-areaspline' },
-    { label: 'OHLC Bar', value: 'ohlc', icon: 'mdi-chart-bar' }
+    { label: 'Candlestick', value: 'candle_solid', icon: 'candlestick_chart' },
+    { label: 'Line', value: 'line', icon: 'show_chart' },
+    { label: 'Hollow Candlestick', value: 'candle_stroke', icon: 'leaderboard' },
+    { label: 'Up Stroke Candle', value: 'candle_up_stroke', icon: 'trending_up' },
+    { label: 'Down Stroke Candle', value: 'candle_down_stroke', icon: 'trending_down' },
+    { label: 'Area', value: 'area', icon: 'area_chart' },
+    { label: 'OHLC Bar', value: 'ohlc', icon: 'bar_chart' }
 ];
 
 const selectChartType = (chartType) => {

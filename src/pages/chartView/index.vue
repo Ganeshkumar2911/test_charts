@@ -33,7 +33,7 @@
               :icon="isDarkMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'"
               variant="text"
               size="small"
-              class="mb-2"
+              class="mb-2 ml-1"
               @click="toggleTheme()"
             ></v-btn>
           </template>
@@ -51,13 +51,13 @@
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
-              :icon="tool.icon"
               variant="text"
               size="small"
               class="mb-2"
               :color="selectedTool === tool.value ? 'primary' : 'default'"
               @click="selectTool(tool.value)"
-            ></v-btn>
+              ><span class="material-symbols-outlined">{{ tool.icon }}</span>
+            </v-btn>
           </template>
           <span>{{ tool.label }}</span>
         </v-tooltip>
@@ -69,12 +69,11 @@
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
-              icon="mdi-delete-outline"
               variant="text"
               size="small"
               color="error"
               @click="clearAllDrawings"
-            ></v-btn>
+            ><span class="material-symbols-outlined">delete</span></v-btn>
           </template>
           <span>Clear All</span>
         </v-tooltip>
@@ -119,7 +118,7 @@ const { toggleTheme } = themeStore
 
 const searchDialog = ref(false);
 const selectedInterval = ref({ label: '1 Minute', value: '1m' });
-const selectedChartType = ref({ label: 'Candlestick', value: 'candle_solid', icon: 'mdi-chart-box-outline' });
+const selectedChartType = ref({ label: 'Candlestick', value: 'candle_solid', icon: 'candlestick_chart' });
 const selectedIndicators = ref([]);
 const selectedSymbol = ref({ 
   symbol: 'BTCUSDT', 
@@ -127,20 +126,20 @@ const selectedSymbol = ref({
   type: 'crypto',
   exchange: 'Binance'
 });
-
 const selectedTool = ref(null);
 
 const drawingTools = [
-  { label: 'Cursor', value: null, icon: 'mdi-cursor-default' },
-  { label: 'Horizontal Line', value: 'horizontalStraightLine', icon: 'mdi-minus' },
-  { label: 'Vertical Line', value: 'verticalStraightLine', icon: 'mdi-minus-thick' },
-  { label: 'Segment Line', value: 'straightLine', icon: 'mdi-chart-line-variant' },
-  { label: 'Ray Line', value: 'rayLine', icon: 'mdi-ray-start-arrow' },
-  { label: 'Price Line', value: 'priceLine', icon: 'mdi-vector-line' },
-  { label: 'Rectangle', value: 'simpleAnnotation', icon: 'mdi-pin' },
-  { label: 'Parallel Lines', value: 'parallelStraightLine', icon: 'mdi-math-norm' },
-  { label: 'Fibonacci Line', value: 'fibonacciLine', icon: 'mdi-format-align-justify' }
+  { label: 'Cursor', value: null, icon: 'arrow_selector_tool' },
+  { label: 'Horizontal Line', value: 'horizontalStraightLine', icon: 'horizontal_rule' },
+  { label: 'Vertical Line', value: 'verticalStraightLine', icon: 'height' },
+  { label: 'Segment Line', value: 'straightLine', icon: 'diagonal_line' },
+  { label: 'Ray Line', value: 'rayLine', icon: 'trending_up' },
+  { label: 'Price Line', value: 'priceLine', icon: 'line_start' },
+  { label: 'Pin', value: 'simpleAnnotation', icon: 'push_pin' },
+  { label: 'Parallel Lines', value: 'parallelStraightLine', icon: 'drag_handle' },
+  { label: 'Fibonacci Line', value: 'fibonacciLine', icon: 'format_align_justify' }
 ];
+
 
 const selectTool = (tool) => {
   selectedTool.value = tool;
