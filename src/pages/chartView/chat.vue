@@ -40,6 +40,7 @@ const props = defineProps({
     },
 });
 onMounted(() => {
+    cryptoWebSocket();
     createChart();
 })
 
@@ -221,12 +222,41 @@ const createChart = async () => {
     chart.setPeriod({ span: 1, type: 'day' })
     
     candleData = await getHistoricalData();
+
+
     chart.setDataLoader({
         getBars: ({ callback }) => {
             callback(candleData)
-        }
+        },
+
+        subscribeBar: ({ callback }) => {
+            socket.onmessage = (event) => {
+            const message = JSON.parse(event.data)
+            const candle = message.k
+
+            if (!candle) return
+
+            const dataPoint = {
+                timestamp: candle.t,
+                open: +candle.o,
+                high: +candle.h,
+                low: +candle.l,
+                close: +candle.c,
+                volume: +candle.v
+            }
+
+            const last = candleData[candleData.length - 1]
+
+            if (last && last.timestamp === dataPoint.timestamp) {
+                candleData[candleData.length - 1] = dataPoint
+            } else {
+                candleData.push(dataPoint)
+            }
+
+            callback(dataPoint)
+            }
+        },
     })
-    cryptoWebSocket();
 }
 
 const getHistoricalData = async () => {
@@ -269,33 +299,33 @@ const cryptoWebSocket = () => {
         console.log('WebSocket connected');
     };
     
-    socket.onmessage = (event) => {
-        const message = JSON.parse(event.data);
-        const candle = message.k;
+    // socket.onmessage = (event) => {
+    //     const message = JSON.parse(event.data);
+    //     const candle = message.k;
         
-        if (chart && candle) {
-            const dataPoint = {
-                timestamp: candle.t,
-                open: parseFloat(candle.o),
-                high: parseFloat(candle.h),
-                low: parseFloat(candle.l),
-                close: parseFloat(candle.c),
-                volume: parseFloat(candle.v)
-            };
-            const lastCandle = candleData[candleData.length - 1];
-            if (lastCandle && lastCandle.timestamp === dataPoint.timestamp) {
-                candleData[candleData.length - 1] = dataPoint;
+    //     if (chart && candle) {
+    //         const dataPoint = {
+    //             timestamp: candle.t,
+    //             open: parseFloat(candle.o),
+    //             high: parseFloat(candle.h),
+    //             low: parseFloat(candle.l),
+    //             close: parseFloat(candle.c),
+    //             volume: parseFloat(candle.v)
+    //         };
+    //         const lastCandle = candleData[candleData.length - 1];
+    //         if (lastCandle && lastCandle.timestamp === dataPoint.timestamp) {
+    //             candleData[candleData.length - 1] = dataPoint;
                 
-            } else {
-                candleData.push(dataPoint);
-            }
-            chart.setDataLoader({
-                getBars: ({ callback }) => {
-                    callback(candleData)
-                }
-            });
-        }
-    };
+    //         } else {
+    //             candleData.push(dataPoint);
+    //         }
+    //         chart.setDataLoader({
+    //             getBars: ({ callback }) => {
+    //                 callback(candleData)
+    //             }
+    //         });
+    //     }
+    // };
     
     socket.onerror = (error) => {
         console.error('WebSocket error:', error);

@@ -49,8 +49,8 @@ export default [
     ],
   },
   {
-    path: "/chat",
-    name: "Chat",
+    path: "/chart",
+    name: "Chart",
     component: () => import("@/pages/chartView/index.vue"),
   }
 ];
