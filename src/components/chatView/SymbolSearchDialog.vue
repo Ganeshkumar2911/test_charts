@@ -1,9 +1,9 @@
 <template>
     <v-dialog v-model="dialogModel" height="80%" max-width="800" scrollable>
-        <v-card :class="isDarkMode ? 'bg-grey-darken-4' : 'bg-white'">
+        <v-card :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : 'bg-white'">
             <v-card-title 
                 class="d-flex align-center"
-                :class="isDarkMode ? 'text-white' : ''"
+                :class="themeStore.isDarkMode ? 'text-white' : ''"
             >
                 <span class="text-h6 font-weight-bold">Symbol Search</span>
                 <v-spacer></v-spacer>
@@ -21,7 +21,7 @@
                     flat
                     rounded="lg"
                     class="no-focus-outline"
-                    :class="isDarkMode ? 'text-white' : ''"
+                    :class="themeStore.isDarkMode ? 'text-white' : ''"
                 >
                 </v-text-field>
             </div>
@@ -34,7 +34,7 @@
                         :key="filter.value"
                         :value="filter.value"
                         size="small"
-                        :class="isDarkMode ? 'bg-grey-darken-2 text-white' : ''"
+                        :class="themeStore.isDarkMode ? 'bg-grey-darken-2 text-white' : ''"
                     >
                         {{ filter.label }}
                     </v-chip>
@@ -44,18 +44,18 @@
             <v-card-text 
                 style="max-height: 500px;" 
                 class="pa-0"
-                :class="isDarkMode ? 'bg-grey-darken-4' : ''"
+                :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''"
             >
-                <v-list :class="isDarkMode ? 'bg-grey-darken-4' : ''">
+                <v-list :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''">
                     <v-list-item
                         v-for="symbol in filteredSymbols"
                         :key="symbol.symbol"
                         @click="selectSymbol(symbol)"
                         class="cursor-pointer"
                         :class="{ 
-                            'bg-blue-lighten-5': !isDarkMode && selectedSymbolModel.symbol === symbol.symbol,
-                            'bg-blue-darken-3': isDarkMode && selectedSymbolModel.symbol === symbol.symbol,
-                            'text-white': isDarkMode
+                            'bg-blue-lighten-5': !themeStore.isDarkMode && selectedSymbolModel.symbol === symbol.symbol,
+                            'bg-blue-darken-3': themeStore.isDarkMode && selectedSymbolModel.symbol === symbol.symbol,
+                            'text-white': themeStore.isDarkMode
                         }"
                     >
                         <template v-slot:prepend>
@@ -81,7 +81,7 @@
                     <v-list-item v-if="filteredSymbols.length === 0">
                         <v-list-item-title 
                             class="text-center text-grey"
-                            :class="isDarkMode ? 'text-grey-lighten-1' : ''"
+                            :class="themeStore.isDarkMode ? 'text-grey-lighten-1' : ''"
                         >
                             No symbols found
                         </v-list-item-title>
@@ -95,9 +95,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useThemeStore } from '@/store/theme';
-import { storeToRefs } from 'pinia';
 
-const { isDarkMode } = storeToRefs(useThemeStore());
+const themeStore = useThemeStore()
 
 const props = defineProps({
     dialog: {

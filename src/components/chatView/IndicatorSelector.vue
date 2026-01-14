@@ -5,7 +5,7 @@
                 flat
                 v-bind="props"
                 class="text-capitalize"
-                :class="isDarkMode ? 'bg-grey-darken-4 text-white' : 'bg-white'"
+                :class="themeStore.isDarkMode ? 'bg-grey-darken-4 text-white' : 'bg-white'"
             >
                 <v-icon icon="mdi-chart-timeline-variant-shimmer" size="small" class="mr-2"></v-icon>
                 Indicators
@@ -22,11 +22,11 @@
         <v-card 
             class="my-2" 
             min-width="250"
-            :class="isDarkMode ? 'bg-grey-darken-4' : 'bg-white'"
+            :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : 'bg-white'"
         >
             <v-card-title 
                 class="text-subtitle-1 font-weight-bold pa-3"
-                :class="isDarkMode ? 'text-white' : ''"
+                :class="themeStore.isDarkMode ? 'text-white' : ''"
             >
                 Select Indicators
             </v-card-title>
@@ -36,14 +36,14 @@
                 density="compact" 
                 max-height="600" 
                 class="overflow-y-auto"
-                :class="isDarkMode ? 'bg-grey-darken-4' : ''"
+                :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''"
             >
                 <v-list-item
                     v-for="indicator in indicators"
                     :key="indicator.value"
                     @click="toggleIndicator(indicator)"
                     class="cursor-pointer"
-                    :class="isDarkMode ? 'text-white' : ''"
+                    :class="themeStore.isDarkMode ? 'text-white' : ''"
                 >
                     <template v-slot:prepend>
                         <v-checkbox-btn
@@ -57,13 +57,13 @@
             </v-list>
             
             <v-divider></v-divider>
-            <v-card-actions :class="isDarkMode ? 'bg-grey-darken-4' : ''">
+            <v-card-actions :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''">
                 <v-btn
                     variant="text"
                     size="small"
                     @click="clearAll"
                     :disabled="selectedIndicatorsModel.length === 0"
-                    :class="isDarkMode ? 'text-white' : ''"
+                    :class="themeStore.isDarkMode ? 'text-white' : ''"
                 >
                     Clear All
                 </v-btn>
@@ -76,9 +76,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useThemeStore } from '@/store/theme';
-import { storeToRefs } from 'pinia';
 
-const { isDarkMode } = storeToRefs(useThemeStore());
+const themeStore = useThemeStore()
 
 const props = defineProps({
     selectedIndicators: {

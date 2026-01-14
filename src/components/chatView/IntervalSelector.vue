@@ -4,7 +4,7 @@
             <v-btn
                 flat
                 class="text-capitalize"
-                :class="isDarkMode ? 'bg-grey-darken-4 text-white' : 'bg-white'"
+                :class="themeStore.isDarkMode ? 'bg-grey-darken-4 text-white' : 'bg-white'"
                 v-bind="props"
             >
                 {{ selectedIntervalModel.label }}
@@ -14,11 +14,11 @@
         <v-card 
             class="my-2" 
             min-width="220"
-            :class="isDarkMode ? 'bg-grey-darken-4' : 'bg-white'"
+            :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : 'bg-white'"
         >
             <v-card-title 
                 class="text-subtitle-1 font-weight-bold pa-3"
-                :class="isDarkMode ? 'text-white' : ''"
+                :class="themeStore.isDarkMode ? 'text-white' : ''"
             >
                 Select Time Interval
             </v-card-title>
@@ -28,7 +28,7 @@
                 density="compact" 
                 max-height="700" 
                 class="overflow-y-auto"
-                :class="isDarkMode ? 'bg-grey-darken-4' : ''"
+                :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''"
             >
                 <v-list-item
                     v-for="interval in intervals"
@@ -36,7 +36,7 @@
                     @click="selectInterval(interval)"
                     :active="selectedIntervalModel.value === interval.value"
                     class="cursor-pointer"
-                    :class="isDarkMode ? 'text-white' : ''"
+                    :class="themeStore.isDarkMode ? 'text-white' : ''"
                 >
                     <v-list-item-title>{{ interval.label }}</v-list-item-title>
                 </v-list-item>
@@ -48,9 +48,8 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useThemeStore } from '@/store/theme';
-import { storeToRefs } from 'pinia';
 
-const { isDarkMode } = storeToRefs(useThemeStore());
+const themeStore = useThemeStore()
  
 const props = defineProps({
     selectedInterval: {
