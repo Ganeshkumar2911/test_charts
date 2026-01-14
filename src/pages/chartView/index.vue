@@ -4,13 +4,9 @@
     <div class="d-flex align-center">
       <v-btn variant="text" icon="mdi-menu" />
 
-      <v-btn
-        variant="outlined"
-        prepend-icon="mdi-magnify"
-        class="mx-2 rounded-xl justify-start border border-grey-darken-1 text-capitalize"
-        width="200"
-        @click="searchDialog = true"
-      >
+      <v-btn prepend-icon="mdi-magnify"
+        class="mx-2 rounded-xl justify-start border border-grey-darken-1 text-capitalize" variant="outlined" width="200"
+        @click="searchDialog = true">
         {{ selectedSymbol.symbol }}
       </v-btn>
       <v-divider vertical class="my-2"></v-divider>
@@ -18,7 +14,7 @@
       <v-divider vertical class="my-2"></v-divider>
       <ChartTypeSelector v-model:selectedChartType="selectedChartType" />
       <v-divider vertical class="my-2"></v-divider>
-      <IndicatorSelector v-model:selectedIndicators="selectedIndicators"/>
+      <IndicatorSelector v-model:selectedIndicators="selectedIndicators" />
       <v-divider vertical class="my-2"></v-divider>
     </div>
 
@@ -28,14 +24,8 @@
         <!-- Dark/Light Mode Toggle -->
         <v-tooltip location="right">
           <template v-slot:activator="{ props }">
-            <v-btn
-              v-bind="props"
-              :icon="isDarkMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'"
-              variant="text"
-              size="small"
-              class="mb-2"
-              @click="toggleTheme()"
-            ></v-btn>
+            <v-btn v-bind="props" :icon="isDarkMode ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'"
+              variant="text" size="small" class="mb-2" @click="toggleTheme()"></v-btn>
           </template>
           <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
         </v-tooltip>
@@ -43,63 +33,36 @@
         <v-divider class="my-2"></v-divider>
 
         <!-- Drawing Tools -->
-        <v-tooltip 
-          v-for="tool in drawingTools" 
-          :key="tool.value"
-          location="right"
-        >
+        <v-tooltip v-for="tool in drawingTools" :key="tool.value" location="right">
           <template v-slot:activator="{ props }">
-            <v-btn
-              v-bind="props"
-              :icon="tool.icon"
-              variant="text"
-              size="small"
-              class="mb-2"
-              :color="selectedTool === tool.value ? 'primary' : 'default'"
-              @click="selectTool(tool.value)"
-            ></v-btn>
+            <v-btn v-bind="props" :icon="tool.icon" variant="text" size="small" class="mb-2"
+              :color="selectedTool === tool.value ? 'primary' : 'default'" @click="selectTool(tool.value)"></v-btn>
           </template>
           <span>{{ tool.label }}</span>
         </v-tooltip>
-        
+
         <v-divider class="my-2"></v-divider>
-        
+
         <!-- Clear all drawings -->
         <v-tooltip location="right">
           <template v-slot:activator="{ props }">
-            <v-btn
-              v-bind="props"
-              icon="mdi-delete-outline"
-              variant="text"
-              size="small"
-              color="error"
-              @click="clearAllDrawings"
-            ></v-btn>
+            <v-btn v-bind="props" icon="mdi-delete-outline" variant="text" size="small" color="error"
+              @click="clearAllDrawings"></v-btn>
           </template>
           <span>Clear All</span>
         </v-tooltip>
       </div>
-      
+
       <!-- Chart Area -->
       <div class="flex-grow-1 mt-1 ml-1 rounded" style="background-color: white;">
-        <Chart
-          class="rounded-s" 
-          v-model:symbol="selectedSymbol.symbol"
-          v-model:interval="selectedInterval.value"
-          v-model:chartType="selectedChartType.value"
-          v-model:indicators="selectedIndicators"
-          v-model:selectedTool="selectedTool"
-          
-          @tool-used="onToolUsed"
-        />
+        <Chart class="rounded-s" v-model:symbol="selectedSymbol.symbol" v-model:interval="selectedInterval.value"
+          v-model:chartType="selectedChartType.value" v-model:indicators="selectedIndicators"
+          v-model:selectedTool="selectedTool" @tool-used="onToolUsed" />
       </div>
     </div>
 
     <!-- Symbol Search Dialog -->
-    <SymbolSearchDialog 
-      v-model:dialog="searchDialog"
-      v-model:selectedSymbol="selectedSymbol"
-    />
+    <SymbolSearchDialog v-model:dialog="searchDialog" v-model:selectedSymbol="selectedSymbol" />
   </div>
 </template>
 
@@ -121,9 +84,9 @@ const searchDialog = ref(false);
 const selectedInterval = ref({ label: '1 Minute', value: '1m' });
 const selectedChartType = ref({ label: 'Candlestick', value: 'candle_solid', icon: 'mdi-chart-box-outline' });
 const selectedIndicators = ref([]);
-const selectedSymbol = ref({ 
-  symbol: 'BTCUSDT', 
-  name: 'Bitcoin', 
+const selectedSymbol = ref({
+  symbol: 'BTCUSDT',
+  name: 'Bitcoin',
   type: 'crypto',
   exchange: 'Binance'
 });
