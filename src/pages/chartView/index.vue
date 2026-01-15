@@ -88,6 +88,7 @@
           v-model:chartType="selectedChartType.value"
           v-model:indicators="selectedIndicators"
           v-model:selectedTool="selectedTool"
+          @indicator-removed="indicatorRemove"
           
           @tool-used="onToolUsed"
         />
@@ -139,6 +140,11 @@ const drawingTools = [
   { label: 'Fibonacci Line', value: 'fibonacciLine', icon: 'format_align_justify' }
 ];
 
+const indicatorRemove = (indicatorName) => {
+  selectedIndicators.value = selectedIndicators.value.filter(
+    indicator => indicator.value.toUpperCase() !== indicatorName
+  );
+};
 
 const selectTool = (tool) => {
   selectedTool.value = tool;

@@ -4,11 +4,14 @@
 
 <script setup>
 import { defineProps, watch, onMounted, onBeforeUnmount } from 'vue'; 
-import { init, dispose } from 'klinecharts';
+import { init, dispose, getSupportedFigures } from 'klinecharts';
 import { defineEmits } from 'vue';
 import { useThemeStore } from '@/store/theme';
 
 import { getCurrentInstance } from 'vue';
+import { id } from 'vuetify/locale';
+
+const supports = getSupportedFigures();
 const { proxy } = getCurrentInstance();
 
 const themeStore = useThemeStore()
@@ -46,6 +49,7 @@ onMounted(() => {
     cryptoWebSocket();
     createChart();
     getnewHistoricalData();
+    console.log('Supported figures:', supports);
 })
 const getnewHistoricalData = async () => {
     const successHandler = (response) => {
@@ -101,7 +105,7 @@ watch(
         // Remove all existing indicators
         const existingIndicators = chart.getIndicators() || [];
         existingIndicators.forEach(indicator => {
-            chart.removeIndicator(indicator.name);
+            chart.removeIndicator(indicator.id);
         });
         
         // Add new indicators
@@ -131,6 +135,36 @@ watch(
                 }
             } catch (error) {
                 console.error(`Error adding indicator ${indicator.label}:`, error);
+            }
+        });
+        chart.setStyles({
+            indicator: {
+                tooltip: {
+                    features: [{
+                        id: 'remove_indicator',
+                        name: 'Remove Indicator',
+                        position: 'left',
+                        marginLeft: 6,
+                        marginTop: 0,
+                        marginRight: 0,
+                        marginBottom: 0,
+                        paddingLeft: 2,
+                        paddingTop: 4,
+                        paddingRight: 2,
+                        paddingBottom: 2,
+                        size: 12,
+                        color: '#888888',
+                        activeColor: '#ff0000',
+                        backgroundColor: 'transparent',
+                        activeBackgroundColor: 'rgba(255, 0, 0, 0.1)',
+                        type: 'path',
+                        content: {
+                            style: 'stroke',
+                            path: 'M2,2 L10,10 M10,2 L2,10',
+                            lineWidth: 1.5
+                        }
+                    }]
+                }
             }
         });
     },
@@ -234,9 +268,7 @@ const createChart = async () => {
                 return d.toLocaleString()
                 }
             }
-        });
-
-    
+    });
     const backgroundColor = themeStore.isDarkMode ? '#1e1e1e' : '#ffffff';
     const textColor = themeStore.isDarkMode ? '#d9d9d9' : '#333333';
     const gridColor = themeStore.isDarkMode ? '#404040' : '#e0e0e0';
@@ -356,32 +388,36 @@ const createChart = async () => {
 
         subscribeBar: ({ callback }) => {
             socket.onmessage = (event) => {
-            const message = JSON.parse(event.data)
-            const candle = message.k
+                const message = JSON.parse(event.data)
+                const candle = message.k
 
-            if (!candle) return
+                if (!candle) return
 
-            const dataPoint = {
-                timestamp: candle.t,
-                open: +candle.o,
-                high: +candle.h,
-                low: +candle.l,
-                close: +candle.c,
-                volume: +candle.v
-            }
+                const dataPoint = {
+                    timestamp: candle.t,
+                    open: +candle.o,
+                    high: +candle.h,
+                    low: +candle.l,
+                    close: +candle.c,
+                    volume: +candle.v
+                }
 
-            const last = candleData[candleData.length - 1]
+                const last = candleData[candleData.length - 1]
 
-            if (last && last.timestamp === dataPoint.timestamp) {
-                candleData[candleData.length - 1] = dataPoint
-            } else {
-                candleData.push(dataPoint)
-            }
+                if (last && last.timestamp === dataPoint.timestamp) {
+                    candleData[candleData.length - 1] = dataPoint
+                } else {
+                    candleData.push(dataPoint)
+                }
 
-            callback(dataPoint)
+                callback(dataPoint)
             }
         },
-    })
+    });
+    chart.subscribeAction('onIndicatorTooltipFeatureClick', (data) => {
+        chart.removeIndicator({id: data.indicator.id});
+        emit('indicator-removed', data.indicator.name);
+    });
 }
 
 const getHistoricalData = async () => {
