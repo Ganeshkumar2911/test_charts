@@ -8,6 +8,9 @@ import { init, dispose } from 'klinecharts';
 import { defineEmits } from 'vue';
 import { useThemeStore } from '@/store/theme';
 
+import { getCurrentInstance } from 'vue';
+const { proxy } = getCurrentInstance();
+
 const themeStore = useThemeStore()
 
 const emit = defineEmits(['tool-used']); 
@@ -42,8 +45,22 @@ const props = defineProps({
 onMounted(() => {
     cryptoWebSocket();
     createChart();
+    getnewHistoricalData();
 })
-
+const getnewHistoricalData = async () => {
+    const successHandler = (response) => {
+        console.log('Historical data fetched:', response); 
+    };
+    const failureHandler = (error) => {
+        console.error("Error:", error);
+    };
+    proxy.$api.request_GET( 
+        "/historical?instrument_token=5633&interval=minute&from=2017-12-15 09:15:00&to=2017-12-15",
+        {},
+        successHandler,
+        failureHandler
+    );
+}
 onBeforeUnmount(() => {
     if (socket) {
         socket.close();
@@ -64,11 +81,6 @@ watch(
             chartType: newChartType
         });
         
-        // Close existing WebSocket
-        if (socket) {
-            socket.close();
-            socket = null;
-        }
         
         // Dispose existing chart
         if (chart) {
@@ -77,6 +89,7 @@ watch(
         }
         
         // Recreate chart and WebSocket
+        cryptoWebSocket();
         createChart();
     }
 );
@@ -219,7 +232,7 @@ const createChart = async () => {
     document.getElementById('chart').style.backgroundColor = backgroundColor;
     
     chart.setSymbol({ ticker: props.symbol })
-    chart.setPeriod({ span: 1, type: 'day' })
+    chart.setPeriod({ span: props.interval.toUpperCase()})
     
     candleData = await getHistoricalData();
 
@@ -262,7 +275,7 @@ const createChart = async () => {
 const getHistoricalData = async () => {
     const symbol = props.symbol;
     const interval = props.interval;
-    const limit = 500;
+    const limit = 1500;
     
     try {
         const response = await fetch(
@@ -297,36 +310,7 @@ const cryptoWebSocket = () => {
     
     socket.onopen = () => {
         console.log('WebSocket connected');
-    };
-    
-    // socket.onmessage = (event) => {
-    //     const message = JSON.parse(event.data);
-    //     const candle = message.k;
-        
-    //     if (chart && candle) {
-    //         const dataPoint = {
-    //             timestamp: candle.t,
-    //             open: parseFloat(candle.o),
-    //             high: parseFloat(candle.h),
-    //             low: parseFloat(candle.l),
-    //             close: parseFloat(candle.c),
-    //             volume: parseFloat(candle.v)
-    //         };
-    //         const lastCandle = candleData[candleData.length - 1];
-    //         if (lastCandle && lastCandle.timestamp === dataPoint.timestamp) {
-    //             candleData[candleData.length - 1] = dataPoint;
-                
-    //         } else {
-    //             candleData.push(dataPoint);
-    //         }
-    //         chart.setDataLoader({
-    //             getBars: ({ callback }) => {
-    //                 callback(candleData)
-    //             }
-    //         });
-    //     }
-    // };
-    
+    };    
     socket.onerror = (error) => {
         console.error('WebSocket error:', error);
     };
