@@ -129,7 +129,6 @@ const selectedSymbol = ref({
 const selectedTool = ref(null);
 
 const drawingTools = [
-  { label: 'Cursor', value: null, icon: 'arrow_selector_tool' },
   { label: 'Horizontal Line', value: 'horizontalStraightLine', icon: 'horizontal_rule' },
   { label: 'Vertical Line', value: 'verticalStraightLine', icon: 'height' },
   { label: 'Segment Line', value: 'straightLine', icon: 'diagonal_line' },

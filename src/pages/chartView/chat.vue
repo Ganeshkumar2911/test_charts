@@ -162,7 +162,32 @@ watch(() => themeStore.isDarkMode,
         
         chart.setStyles({
             candle: {
-                type: props.chartType
+                type: props.chartType,
+                tooltip: {
+                    showRule: 'always',
+                    showType: 'standard',
+                    title: {
+                        show: true,
+                        size: 14,
+                        family: 'Helvetica Neue',
+                        weight: 'normal',
+                        color: textColor, // Dynamic color for symbol and period
+                        marginLeft: 8,
+                        marginTop: 4,
+                        marginRight: 8,
+                        marginBottom: 4
+                    },
+                    legend: {
+                        size: 12,
+                        family: 'Helvetica Neue',
+                        weight: 'normal',
+                        color: isDark ? '#FFFFFF' : '#000000',
+                        marginLeft: 8,
+                        marginTop: 4,
+                        marginRight: 8,
+                        marginBottom: 4
+                    }
+                }
             },
             grid: {
                 horizontal: {
@@ -190,9 +215,28 @@ watch(() => themeStore.isDarkMode,
 );
 
 const createChart = async () => {
-    chart = init('chart')
+   chart = init('chart', {
+            timezone: 'Asia/Kolkata',
+            formatter: {
+                formatDate: ({ timestamp, type }) => {
+                const d = new Date(timestamp)
+
+                if (type === 'crosshair' || type === 'xAxis') {
+                    return d.toLocaleString('en-IN', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                    })
+                }
+
+                return d.toLocaleString()
+                }
+            }
+        });
+
     
-    // Apply dark mode on chart creation
     const backgroundColor = themeStore.isDarkMode ? '#1e1e1e' : '#ffffff';
     const textColor = themeStore.isDarkMode ? '#d9d9d9' : '#333333';
     const gridColor = themeStore.isDarkMode ? '#404040' : '#e0e0e0';
@@ -204,11 +248,69 @@ const createChart = async () => {
                 area: {
                     lineColor: 'red',
                     backgroundColor: 'transparent'
+                },
+                tooltip: {
+                    showRule: 'always',
+                    showType: 'standard',
+                    title: {
+                        show: true,
+                        size: 14,
+                        family: 'Helvetica Neue',
+                        weight: 'normal',
+                        color: textColor,
+                        marginLeft: 8,
+                        marginTop: 4,
+                        marginRight: 8,
+                        marginBottom: 4
+                    },
+                    legend: {
+                        size: 12,
+                        family: 'Helvetica Neue',
+                        weight: 'normal',
+                        color: textColor,
+                        marginLeft: 8,
+                        marginTop: 4,
+                        marginRight: 8,
+                        marginBottom: 4
+                    }
                 }
-              }
+            }
             : {
-                type: props.chartType
-              },
+                type: props.chartType,
+                tooltip: {
+                    showRule: 'always',
+                    showType: 'standard',
+                    title: {
+                        show: true,
+                        size: 14,
+                        family: 'Helvetica Neue',
+                        weight: 'normal',
+                        color: textColor,
+                        marginLeft: 8,
+                        marginTop: 4,
+                        marginRight: 8,
+                        marginBottom: 4
+                    },
+                    legend: {
+                        size: 12,
+                        family: 'Helvetica Neue',
+                        weight: 'normal',
+                        color: textColor,
+                        marginLeft: 8,
+                        marginTop: 4,
+                        marginRight: 8,
+                        marginBottom: 4,
+                        template: [
+                            // { title: 'time', value: '{time}' },
+                            { title: 'open', value: '{open}' },
+                            { title: 'high', value: '{high}' },
+                            { title: 'low', value: '{low}' },
+                            { title: 'close', value: '{close}' },
+                            { title: 'volume', value: '{volume}' }
+                        ]
+                    }
+                }
+            },
         grid: {
             horizontal: { 
                 color: gridColor,
@@ -220,12 +322,22 @@ const createChart = async () => {
             }
         },
         xAxis: {
+            show: true,
             axisLine: { color: gridColor },
             tickText: { color: textColor }
         },
         yAxis: {
             axisLine: { color: gridColor },
             tickText: { color: textColor }
+        },
+        crosshair: {
+            show: true, 
+            vertical: {
+                show: true, 
+                text: {
+                    show: true,
+                }
+            }
         }
     });
     

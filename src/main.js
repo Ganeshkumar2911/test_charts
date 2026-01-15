@@ -20,7 +20,7 @@ const pinia = createPinia();
 import 'unfonts.css'
 
 const axios_instance = axios.create({
-	baseURL: "https://w2llv2cm-8585.inc1.devtunnels.ms/",
+	baseURL: "https://2jdl5d11-3000.inc1.devtunnels.ms/",
 	timeout: 50000,
 });
 const app = createApp(App)
