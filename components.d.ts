@@ -16,6 +16,8 @@ declare module 'vue' {
     ChartTypeSelector: typeof import('./src/components/chatView/ChartTypeSelector.vue')['default']
     ConfigureStrategie: typeof import('./src/components/strategies/configureStrategie.vue')['default']
     ConformationDialog: typeof import('./src/components/strategies/conformationDialog.vue')['default']
+    DrawingTools: typeof import('./src/components/chatView/DrawingToolsSelector.vue')['default']
+    DrawingToolsSelector: typeof import('./src/components/chatView/DrawingToolsSelector.vue')['default']
     IndicatorSelector: typeof import('./src/components/chatView/IndicatorSelector.vue')['default']
     IntervalSelector: typeof import('./src/components/chatView/IntervalSelector.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

@@ -1,5 +1,11 @@
 <template>
-    <v-menu v-model="menu" :close-on-content-click="false" location="top">
+    <!-- Desktop Menu -->
+    <v-menu 
+        v-if="!$vuetify.display.xs"
+        v-model="menu" 
+        :close-on-content-click="false" 
+        location="top"
+    >
         <template v-slot:activator="{ props }">
             <v-btn
                 flat
@@ -45,6 +51,52 @@
             </v-list>
         </v-card>
     </v-menu>
+
+    <!-- Mobile Button + Bottom Sheet -->
+    <template v-if="$vuetify.display.xs">
+        <v-btn
+            flat
+            :class="themeStore.isDarkMode ? 'bg-grey-darken-4 text-white' : 'bg-white'"
+            @click="bottomSheet = true"
+        >
+            <span class="material-symbols-outlined">{{ selectedChartTypeModel.icon }}</span>
+        </v-btn>
+
+        <v-bottom-sheet v-model="bottomSheet">
+            <v-card :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : 'bg-white'" height="50vh">
+                <v-card-title 
+                    class="d-flex align-center text-subtitle-1 font-weight-bold pa-3"
+                    :class="themeStore.isDarkMode ? 'text-white' : ''"
+                >
+                    <span class="mx-2">Select Chart Type</span>
+                    <v-spacer></v-spacer>
+                    <v-btn icon="mdi-close" variant="text" size="small" @click="bottomSheet = false"></v-btn>
+                </v-card-title>
+                <v-divider></v-divider>
+                
+                <v-card-text class="pa-0">
+                    <v-list 
+                        density="comfortable"
+                        :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''"
+                    >
+                        <v-list-item
+                            v-for="chartType in chartTypes"
+                            :key="chartType.value"
+                            @click="selectChartTypeMobile(chartType)"
+                            :active="selectedChartTypeModel.value === chartType.value"
+                            class="cursor-pointer"
+                            :class="themeStore.isDarkMode ? 'text-white' : ''"
+                        >
+                            <template v-slot:prepend>
+                                <span class="material-symbols-outlined mr-3">{{ chartType.icon }}</span>
+                            </template>
+                            <v-list-item-title>{{ chartType.label }}</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-card-text>
+            </v-card>
+        </v-bottom-sheet>
+    </template>
 </template>
 
 <script setup>
@@ -63,6 +115,7 @@ const props = defineProps({
 const emit = defineEmits(['update:selectedChartType']);
 
 const menu = ref(false);
+const bottomSheet = ref(false);
 
 const selectedChartTypeModel = computed({
     get: () => props.selectedChartType,
@@ -82,6 +135,11 @@ const chartTypes = [
 const selectChartType = (chartType) => {
     selectedChartTypeModel.value = chartType;
     menu.value = false;
+};
+
+const selectChartTypeMobile = (chartType) => {
+    selectedChartTypeModel.value = chartType;
+    bottomSheet.value = false;
 };
 </script>
 

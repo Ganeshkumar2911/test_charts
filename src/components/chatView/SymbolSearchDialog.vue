@@ -1,5 +1,12 @@
 <template>
-    <v-dialog v-model="dialogModel" height="80%" max-width="800" scrollable>
+    <!-- Desktop Dialog -->
+    <v-dialog 
+        v-if="!$vuetify.display.xs"
+        v-model="dialogModel" 
+        height="80%" 
+        max-width="800"
+        scrollable
+    >
         <v-card :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : 'bg-white'">
             <v-card-title 
                 class="d-flex align-center"
@@ -90,6 +97,104 @@
             </v-card-text>
         </v-card>
     </v-dialog>
+
+    <!-- Mobile Bottom Sheet -->
+    <v-bottom-sheet
+        v-if="$vuetify.display.xs"
+        v-model="dialogModel"
+        scrollable
+    >
+        <v-card :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : 'bg-white'" min-height="90vh">
+            <v-card-title 
+                class="d-flex align-center"
+                :class="themeStore.isDarkMode ? 'text-white' : ''"
+            >
+                <span class="text-subtitle-1 font-weight-bold">Symbol Search</span>
+                <v-spacer></v-spacer>
+                <v-btn icon="mdi-close" variant="text" @click="dialogModel = false"></v-btn>
+            </v-card-title>
+            <v-divider></v-divider>
+            <!-- Search Input -->
+            <div class="px-4 pt-4">
+                <v-text-field
+                    v-model="searchQuery"
+                    prepend-inner-icon="mdi-magnify"
+                    placeholder="Search symbols..."
+                    variant="outlined"
+                    density="comfortable"
+                    clearable                    
+                    flat
+                    rounded="lg"
+                    class="no-focus-outline"
+                    :class="themeStore.isDarkMode ? 'text-white' : ''"
+                >
+                </v-text-field>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="px-4 pb-2">
+                <v-chip-group v-model="selectedFilter" selected-class="bg-primary" mandatory>
+                    <v-chip 
+                        v-for="filter in filters" 
+                        :key="filter.value"
+                        :value="filter.value"
+                        size="small"
+                        :class="themeStore.isDarkMode ? 'bg-grey-darken-2 text-white' : ''"
+                    >
+                        {{ filter.label }}
+                    </v-chip>
+                </v-chip-group>
+            </div>
+            
+            <!-- Symbol List -->
+            <v-card-text 
+                class="pa-0"
+                :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''"
+            >
+                <v-list :class="themeStore.isDarkMode ? 'bg-grey-darken-4' : ''">
+                    <v-list-item
+                        v-for="symbol in filteredSymbols"
+                        :key="symbol.symbol"
+                        @click="selectSymbol(symbol)"
+                        class="cursor-pointer"
+                        :class="{ 
+                            'bg-blue-lighten-5': !themeStore.isDarkMode && selectedSymbolModel.symbol === symbol.symbol,
+                            'bg-blue-darken-3': themeStore.isDarkMode && selectedSymbolModel.symbol === symbol.symbol,
+                            'text-white': themeStore.isDarkMode
+                        }"
+                    >
+                        <template v-slot:prepend>
+                            <v-avatar :color="symbol.color" size="40">
+                                <v-icon v-if="symbol.icon" :icon="symbol.icon" color="white"></v-icon>
+                                <span v-else class="text-white font-weight-bold">{{ symbol.symbol.substring(0, 2) }}</span>
+                            </v-avatar>
+                        </template>
+
+                        <v-list-item-title class="font-weight-medium">
+                            <span class="text-primary">{{ symbol.displaySymbol }}</span>
+                            {{ symbol.name }}
+                        </v-list-item-title>
+
+                        <template v-slot:append>
+                            <div class="text-right">
+                                <div class="text-caption text-grey">{{ symbol.type }}</div>
+                                <div class="text-body-2 font-weight-medium">{{ symbol.exchange }}</div>
+                            </div>
+                        </template>
+                    </v-list-item>
+
+                    <v-list-item v-if="filteredSymbols.length === 0">
+                        <v-list-item-title 
+                            class="text-center text-grey"
+                            :class="themeStore.isDarkMode ? 'text-grey-lighten-1' : ''"
+                        >
+                            No symbols found
+                        </v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-card-text>
+        </v-card>
+    </v-bottom-sheet>
 </template>
 
 <script setup>

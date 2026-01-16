@@ -16,7 +16,7 @@ const { proxy } = getCurrentInstance();
 
 const themeStore = useThemeStore()
 
-const emit = defineEmits(['tool-used']); 
+const emit = defineEmits(['tool-used', 'indicator-removed']); 
 
 let chart = null
 let socket = null;
@@ -140,30 +140,56 @@ watch(
         chart.setStyles({
             indicator: {
                 tooltip: {
-                    features: [{
-                        id: 'remove_indicator',
-                        name: 'Remove Indicator',
-                        position: 'left',
-                        marginLeft: 6,
-                        marginTop: 0,
-                        marginRight: 0,
-                        marginBottom: 0,
-                        paddingLeft: 2,
-                        paddingTop: 4,
-                        paddingRight: 2,
-                        paddingBottom: 2,
-                        size: 12,
-                        color: '#888888',
-                        activeColor: '#ff0000',
-                        backgroundColor: 'transparent',
-                        activeBackgroundColor: 'rgba(255, 0, 0, 0.1)',
-                        type: 'path',
-                        content: {
-                            style: 'stroke',
-                            path: 'M2,2 L10,10 M10,2 L2,10',
-                            lineWidth: 1.5
+                    features: [
+                        {
+                            id: 'settings_indicator',
+                            name: 'Settings',
+                            position: 'right',
+                            marginLeft: 2,
+                            marginTop: 0,
+                            marginRight: 0,
+                            marginBottom: 0,
+                            paddingLeft: 4,
+                            paddingTop: 4,
+                            paddingRight: 2,
+                            paddingBottom: 2,
+                            size: 18,
+                            color: '#888888',
+                            activeColor: '#2196F3',
+                            backgroundColor: 'transparent',
+                            activeBackgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            type: 'path',
+                            content: {
+                                style: 'stroke',
+                                path: 'M10,6 C10,7.1 9.1,8 8,8 C6.9,8 6,7.1 6,6 C6,4.9 6.9,4 8,4 C9.1,4 10,4.9 10,6 Z M12,5.5 L12,6.5 L11,6.5 C10.9,6.9 10.7,7.2 10.4,7.5 L11,8.1 L10.3,8.8 L9.7,8.2 C9.4,8.5 9.1,8.7 8.7,8.8 L8.7,9.8 L7.7,9.8 L7.7,8.8 C7.3,8.7 7,8.5 6.7,8.2 L6.1,8.8 L5.4,8.1 L6,7.5 C5.7,7.2 5.5,6.9 5.4,6.5 L4.4,6.5 L4.4,5.5 L5.4,5.5 C5.5,5.1 5.7,4.8 6,4.5 L5.4,3.9 L6.1,3.2 L6.7,3.8 C7,3.5 7.3,3.3 7.7,3.2 L7.7,2.2 L8.7,2.2 L8.7,3.2 C9.1,3.3 9.4,3.5 9.7,3.8 L10.3,3.2 L11,3.9 L10.4,4.5 C10.7,4.8 10.9,5.1 11,5.5 L12,5.5 Z',
+                                lineWidth: 1.5
+                            }
+                        },
+                        {
+                            id: 'remove_indicator',
+                            name: 'Remove Indicator',
+                            position: 'right',
+                            marginLeft: 2,
+                            marginTop: 0,
+                            marginRight: 0,
+                            marginBottom: 0,
+                            paddingLeft: 4,
+                            paddingTop: 4,
+                            paddingRight: 2,
+                            paddingBottom: 2,
+                            size: 18,
+                            color: '#888888',
+                            activeColor: '#ff0000',
+                            backgroundColor: 'transparent',
+                            activeBackgroundColor: 'rgba(255, 0, 0, 0.1)',
+                            type: 'path',
+                            content: {
+                                style: 'stroke',
+                                path: 'M2,2 L10,10 M10,2 L2,10',
+                                lineWidth: 1.5
+                            }
                         }
-                    }]
+                    ]
                 }
             }
         });
@@ -334,11 +360,11 @@ const createChart = async () => {
                         marginBottom: 4,
                         template: [
                             // { title: 'time', value: '{time}' },
-                            { title: 'open', value: '{open}' },
-                            { title: 'high', value: '{high}' },
-                            { title: 'low', value: '{low}' },
-                            { title: 'close', value: '{close}' },
-                            { title: 'volume', value: '{volume}' }
+                            { title: 'O ', value: '{open}' },
+                            { title: 'H ', value: '{high}' },
+                            { title: 'L ', value: '{low}' },
+                            { title: 'C ', value: '{close}' },
+                            { title: 'V ', value: '{volume}' }
                         ]
                     }
                 }
@@ -415,6 +441,8 @@ const createChart = async () => {
         },
     });
     chart.subscribeAction('onIndicatorTooltipFeatureClick', (data) => {
+        // console.log('Indicator tooltip feature clicked:', data);
+        // data.indicator.calcParams = [8];
         chart.removeIndicator({id: data.indicator.id});
         emit('indicator-removed', data.indicator.name);
     });
